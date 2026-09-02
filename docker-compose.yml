@@ -1,0 +1,73 @@
+name: online-shop-benchmark
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-CU16-ubuntu-22.04
+    platform: linux/amd64
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:-OnlineShop_Test_2026!}
+    ports:
+      - "${MSSQL_PORT:-1433}:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+      - ./backups:/var/opt/mssql/backup
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$${MSSQL_SA_PASSWORD}\" -C -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 4G
+
+  postgres:
+    image: postgres:16.4-bookworm
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-OnlineShop_Test_2026!}
+      POSTGRES_DB: ${POSTGRES_DB:-OnlineShopDB}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backups:/backups
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 4G
+
+  mongodb:
+    image: mongo:7.0.14-jammy
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-OnlineShop_Test_2026!}
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    volumes:
+      - mongo_data:/data/db
+      - ./backups:/backups
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 4G
+
+volumes:
+  mssql_data:
+  postgres_data:
+  mongo_data:

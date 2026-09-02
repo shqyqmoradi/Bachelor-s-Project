@@ -1,0 +1,11 @@
+db = db.getSiblingDB("OnlineShopDB");
+db.customers.createIndex({ email: 1 }, { unique: true, name: "ux_customers_email" });
+db.products.createIndex({ sku: 1 }, { unique: true, name: "ux_products_sku" });
+db.products.createIndex({ categoryId: 1 }, { name: "ix_products_category" });
+db.products.createIndex({ name: 1 }, { name: "ix_products_name" });
+db.orders.createIndex({ customerId: 1, orderDate: -1 }, { name: "ix_orders_customer_date" });
+db.orders.createIndex({ orderDate: 1 }, { name: "ix_orders_date" });
+db.orders.createIndex({ status: 1 }, { name: "ix_orders_status" });
+db.orders.createIndex({ "items.productId": 1 }, { name: "ix_orders_item_product" });
+db.orders.createIndex({ "payment.transactionRef": 1 }, { unique: true, name: "ux_payment_transaction_ref" });
+db.orders.createIndex({ "shipment.trackingNumber": 1 }, { unique: true, name: "ux_shipment_tracking", partialFilterExpression: { "shipment.trackingNumber": { $type: "string" } } });

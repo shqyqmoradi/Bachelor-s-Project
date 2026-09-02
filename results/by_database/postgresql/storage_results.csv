@@ -1,0 +1,2 @@
+database,version,data_bytes,index_bytes,total_bytes,is_real
+postgresql,16.4 (Debian 16.4-1.pgdg120+2),61865984,66600960,128086499,True

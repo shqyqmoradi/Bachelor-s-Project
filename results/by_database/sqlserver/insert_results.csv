@@ -1,0 +1,2 @@
+database,metric,orders,customers,products,elapsed_seconds,avg_cpu_percent,peak_ram_mb,avg_ram_mb,is_real
+sqlserver,canonical_dataset_insert,100000,20000,10000,27.138847124995664,24.436003150057715,3908.046875,3878.280776956218,True

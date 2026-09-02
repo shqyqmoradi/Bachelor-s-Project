@@ -1,0 +1,2 @@
+database,metric,orders,customers,products,elapsed_seconds,avg_cpu_percent,peak_ram_mb,avg_ram_mb,is_real
+postgresql,canonical_dataset_insert,100000,20000,10000,27.586990542011335,57.643752303760124,3552.21875,3303.286416277093,True

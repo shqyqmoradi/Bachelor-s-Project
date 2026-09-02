@@ -1,0 +1,21 @@
+# Local environment and secrets
+.env
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Editor and OS files
+.DS_Store
+.idea/
+.vscode/
+
+# Generated database backup media
+backups/*
+!backups/.gitkeep
+
+# Test and tool caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.log

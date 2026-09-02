@@ -1,0 +1,2 @@
+database,metric,orders,customers,products,elapsed_seconds,avg_cpu_percent,peak_ram_mb,avg_ram_mb,is_real
+mongodb,canonical_dataset_insert,100000,20000,10000,11.423329415993067,25.473776994199937,3293.640625,3273.560976671309,True

@@ -1,0 +1,19 @@
+{
+  "started_utc": "2026-08-30T17:13:12.922685+00:00",
+  "os": "macOS-26.6.2-arm64-arm-64bit",
+  "python": "3.12.3",
+  "physical_cores": 8,
+  "logical_cores": 8,
+  "ram_bytes": 8589934592,
+  "settings": {
+    "seed": 20260830,
+    "orders": 100000,
+    "repetitions": 10,
+    "batch_size": 2000,
+    "customer_count": 20000,
+    "product_count": 10000,
+    "category_count": 50
+  },
+  "cache_policy": "warm; one untimed warm-up then timed repetitions",
+  "cold_cache": "not automated because portable, equivalent cache eviction is unavailable"
+}

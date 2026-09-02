@@ -1,0 +1,18 @@
+{
+  "merged_utc": "2026-08-30T17:42:41.579133+00:00",
+  "databases": [
+    "sqlserver",
+    "postgresql",
+    "mongodb"
+  ],
+  "dataset": "100000 orders, 20000 customers, 10000 products, 50 categories; seed 20260830",
+  "repetitions": 10,
+  "index_phases": [
+    "without_extra_indexes",
+    "with_indexes"
+  ],
+  "cache_mode": "warm",
+  "host_architecture": "arm64; SQL Server linux/amd64 emulation (interpret as an environment limitation)",
+  "docker_memory_bytes": 4106604544,
+  "sources": "results/by_database/*"
+}

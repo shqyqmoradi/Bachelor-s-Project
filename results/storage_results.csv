@@ -1,0 +1,4 @@
+database,version,data_bytes,index_bytes,total_bytes,is_real
+sqlserver,16.0.4165.4,55476224,55754752,352321536,True
+postgresql,16.4 (Debian 16.4-1.pgdg120+2),61865984,66600960,128086499,True
+mongodb,7.0.14,131395659,7856128,39817216,True

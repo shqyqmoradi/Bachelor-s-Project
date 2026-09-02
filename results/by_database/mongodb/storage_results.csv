@@ -1,0 +1,2 @@
+database,version,data_bytes,index_bytes,total_bytes,is_real
+mongodb,7.0.14,131395659,7856128,39817216,True
