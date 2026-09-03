@@ -7,9 +7,8 @@
 عملیات خواندن/تجمیع/نوشتن، دو وضعیت Index، پایش CPU/RAM، اندازهٔ ذخیره‌سازی و
 Backup/Restore پوشش داده شده‌اند. تفاوت مدل سندی و رابطه‌ای عمداً حفظ شده است تا
 هر موتور با مدل طبیعی خود آزمایش شود، در حالی که شناسه‌ها و واقعیت‌های تجاری یکسان
-می‌مانند. در زمان تهیهٔ این نسخه Docker daemon در دسترس نبود؛ بنابراین هیچ عددی
-به‌عنوان نتیجه درج نشده است. بخش عددی با اجرای `benchmark.run_all` و
-`benchmark.analyze_results` از دادهٔ واقعی تولید می‌شود.
+می‌مانند. Benchmark واقعی با ۱۰۰٬۰۰۰ سفارش و ۱۰ تکرار اجرا شد و بخش عددی با
+`benchmark.run_all` و `benchmark.analyze_results` از داده‌های واقعی تولید شده است.
 
 ## 1. مقدمه
 
@@ -109,9 +108,10 @@ wall-clock ms گزارش می‌شوند. ترتیب موتور در چند اج
 
 Q01 تا Q04 lookup و list، Q05 جزئیات کامل Order، Q06/Q07 فروش کل، Q08 محصول برتر،
 Q09 فروش Category، Q10 میانگین سفارش، Q11 شمارش Status، Q12 Customer برتر و Q13
-Aggregation سنگین هستند. Q14 نام الزام مفهومی معادل Mongo Q13 است. Q15/Q16/Q17
-Insert/Update/Delete هستند. در SQL mutationها Rollback و در MongoDB cleanup قطعی
-دارند. خروجی کامل در فایل‌های `queries.sql/js` و کاتالوگ اجرایی Python موجود است.
+«Heavy Multi-Join / equivalent MongoDB Aggregation» است. سه عملیات نوشتن نیز
+Insert/Update/Delete هستند؛ بنابراین در مجموع ۱۶ عملیات مستقل اجرا شده است. در SQL
+mutationها Rollback و در MongoDB cleanup قطعی دارند. خروجی کامل در فایل‌های
+`queries.sql/js` و کاتالوگ اجرایی Python موجود است.
 
 ## 14. آزمون Insert
 
@@ -200,10 +200,10 @@ Query را تولید می‌کند. آن فایل باید در نسخهٔ تح
 ## 21. نمودارها
 
 `benchmark.charts` نمودار Query، CPU، RAM، Storage و در صورت وجود Backup/Restore را
-از CSV واقعی می‌سازد. تا پیش از آن پوشه فقط README دارد. Radar chart توصیهٔ اصلی
-نیست، چون normalize کردن latency، security و effort می‌تواند تفاوت معنا و جهت
-مقیاس‌ها را پنهان کند؛ در صورت استفاده باید normalization و «بیشتر بهتر/کمتر بهتر»
-صریح باشد.
+از CSV واقعی می‌سازد. نمودارهای Query، Insert، CPU، RAM، Storage و Backup/Restore
+در پوشهٔ `charts` ثبت شده‌اند. Radar chart توصیهٔ اصلی نیست، چون normalize کردن
+latency، security و effort می‌تواند تفاوت معنا و جهت مقیاس‌ها را پنهان کند؛ در صورت
+استفاده باید normalization و «بیشتر بهتر/کمتر بهتر» صریح باشد.
 
 ## 22. بحث و تحلیل
 
@@ -229,13 +229,13 @@ Median و dispersion رفتار tail را روشن می‌کنند.
 
 ## 24. نتیجه‌گیری
 
-پیش از Benchmark واقعی، انتخاب برنده معتبر نیست. از منظر طراحی، SQL Server و
-PostgreSQL یکپارچگی رابطه‌ای را مستقیم enforce می‌کنند و برای روابط پیچیده شفاف‌اند؛
-MongoDB retrieval یک Order aggregate را با embedding ساده می‌کند ولی Integrity
-میان Product/Customer را به برنامه واگذار می‌کند. تناسب نهایی برای OLTP، analytics،
-schema flexibility یا rapid development باید با اعداد این workload، نیاز امنیتی،
-Edition و عملیات سازمان جمع‌بندی شود. متن قطعی نتیجه‌گیری پس از تولید
-`measured_results.md` تکمیل می‌شود و نباید از پیش تعیین شود.
+در این آزمایش SQL Server کمترین میانگین زمان Query و سریع‌ترین Backup/Restore را
+داشت، PostgreSQL در بیشتر Queryهای مستقل برنده و از نظر هزینه، منابع و یکپارچگی
+رابطه‌ای متعادل‌ترین گزینه بود، و MongoDB سریع‌ترین Insert و خواندن کامل Order را
+ارائه کرد. برای همین سناریوی فروشگاه آنلاین PostgreSQL انتخاب کلی پیشنهادی است؛
+SQL Server برای محیط‌های Microsoft/Enterprise و MongoDB برای workload واقعاً سندی
+و کم‌وابسته به JOIN انتخاب مناسب‌تری هستند. این نتیجه فقط به محیط و workload ثبت‌شده
+در `measured_results.md` مربوط است و تعمیم عمومی محسوب نمی‌شود.
 
 ## 25. منابع
 

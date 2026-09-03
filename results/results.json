@@ -6,7 +6,7 @@
       "postgresql",
       "mongodb"
     ],
-    "dataset": "100000 orders, 20000 customers, 10000 products, 50 categories; seed 20260830",
+    "dataset": "100000 orders, 20000 customers, 20000 addresses, 10000 products, 50 categories; seed 20260830",
     "repetitions": 10,
     "index_phases": [
       "without_extra_indexes",
@@ -14624,7 +14624,8 @@
       "avg_cpu_percent": "24.436003150057715",
       "peak_ram_mb": "3908.046875",
       "avg_ram_mb": "3878.280776956218",
-      "is_real": "True"
+      "is_real": "True",
+      "addresses": "20000"
     },
     {
       "database": "postgresql",
@@ -14636,7 +14637,8 @@
       "avg_cpu_percent": "57.643752303760124",
       "peak_ram_mb": "3552.21875",
       "avg_ram_mb": "3303.286416277093",
-      "is_real": "True"
+      "is_real": "True",
+      "addresses": "20000"
     },
     {
       "database": "mongodb",
@@ -14648,7 +14650,8 @@
       "avg_cpu_percent": "25.473776994199937",
       "peak_ram_mb": "3293.640625",
       "avg_ram_mb": "3273.560976671309",
-      "is_real": "True"
+      "is_real": "True",
+      "addresses": "20000"
     }
   ],
   "storage_results.csv": [

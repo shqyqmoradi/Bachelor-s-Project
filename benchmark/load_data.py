@@ -103,7 +103,7 @@ def load_mongodb(s: Settings, g: CanonicalGenerator) -> dict:
 
 def result(database: str, s: Settings, started: float, monitor: SystemMonitor) -> dict:
     stats = monitor.stats()
-    return {"database": database, "metric": "canonical_dataset_insert", "orders": s.orders, "customers": s.customer_count, "products": s.product_count, "elapsed_seconds": time.perf_counter() - started, **asdict(stats), "is_real": True}
+    return {"database": database, "metric": "canonical_dataset_insert", "orders": s.orders, "customers": s.customer_count, "addresses": s.customer_count, "products": s.product_count, "elapsed_seconds": time.perf_counter() - started, **asdict(stats), "is_real": True}
 
 
 def main() -> None:

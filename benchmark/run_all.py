@@ -40,7 +40,7 @@ def main() -> None:
     setup = {"sqlserver":setup_sqlserver,"postgresql":setup_postgresql,"mongodb":setup_mongodb}
     loaders = {"sqlserver":load_sqlserver,"postgresql":load_postgresql,"mongodb":load_mongodb}
     raw, inserts, storage = [], [], []
-    public_settings = {"seed":s.seed,"orders":s.orders,"repetitions":s.repetitions,"batch_size":s.batch_size,"customer_count":s.customer_count,"product_count":s.product_count,"category_count":s.category_count}
+    public_settings = {"seed":s.seed,"orders":s.orders,"repetitions":s.repetitions,"batch_size":s.batch_size,"customer_count":s.customer_count,"address_count":s.customer_count,"product_count":s.product_count,"category_count":s.category_count}
     metadata = {"started_utc":datetime.now(timezone.utc).isoformat(),"os":platform.platform(),"python":platform.python_version(),"physical_cores":psutil.cpu_count(logical=False),"logical_cores":psutil.cpu_count(),"ram_bytes":psutil.virtual_memory().total,"settings":public_settings,"cache_policy":"warm; one untimed warm-up then timed repetitions","cold_cache":"not automated because portable, equivalent cache eviction is unavailable"}
     for database in selected:
         print(f"=== {database} ===")
@@ -68,7 +68,8 @@ def main() -> None:
     write_csv(output / "storage_results.csv", storage)
     (output / "results.json").write_text(json.dumps({"metadata":metadata,"insert":inserts,"storage":storage,"raw":raw,"summary":summary}, indent=2, default=str), encoding="utf-8")
     (output / "environment.json").write_text(json.dumps(metadata, indent=2, default=str), encoding="utf-8")
-    if not args.skip_charts: generate_charts()
+    if not args.skip_charts:
+        generate_charts()
     print(f"Real results written under {output}")
 
 

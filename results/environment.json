@@ -5,7 +5,7 @@
     "postgresql",
     "mongodb"
   ],
-  "dataset": "100000 orders, 20000 customers, 10000 products, 50 categories; seed 20260830",
+  "dataset": "100000 orders, 20000 customers, 20000 addresses, 10000 products, 50 categories; seed 20260830",
   "repetitions": 10,
   "index_phases": [
     "without_extra_indexes",

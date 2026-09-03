@@ -13,7 +13,8 @@
       "batch_size": 2000,
       "customer_count": 20000,
       "product_count": 10000,
-      "category_count": 50
+      "category_count": 50,
+      "address_count": 20000
     },
     "cache_policy": "warm; one untimed warm-up then timed repetitions",
     "cold_cache": "not automated because portable, equivalent cache eviction is unavailable"
@@ -29,7 +30,8 @@
       "avg_cpu_percent": 57.643752303760124,
       "peak_ram_mb": 3552.21875,
       "avg_ram_mb": 3303.286416277093,
-      "is_real": true
+      "is_real": true,
+      "addresses": 20000
     }
   ],
   "storage": [

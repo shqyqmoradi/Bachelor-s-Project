@@ -18,11 +18,16 @@ class GeneratorTests(unittest.TestCase):
 
     def test_counts_keys_and_money(self) -> None:
         g = CanonicalGenerator(self.settings)
+        customers = g.customers()
+        addresses = g.addresses()
         batches = list(g.order_batches())
         orders = [row for batch in batches for row in batch.orders]
         items = [row for batch in batches for row in batch.items]
         payments = [row for batch in batches for row in batch.payments]
         shipments = [row for batch in batches for row in batch.shipments]
+        self.assertEqual(len(customers), self.settings.customer_count)
+        self.assertEqual(len(addresses), self.settings.customer_count)
+        self.assertEqual({row[0] for row in customers}, {row[1] for row in addresses})
         self.assertEqual(len(orders), self.settings.orders)
         self.assertEqual(len(payments), self.settings.orders)
         self.assertEqual(len(shipments), self.settings.orders)
