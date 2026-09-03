@@ -56,7 +56,7 @@ Tagها ثابت‌اند ولی برای آرشیو بلندمدت بهتر ا�
 ## نصب از صفر
 
 ```bash
-cd /Users/reza/Workspace/Project
+cd Bachelor-s-Project
 make env
 ```
 
