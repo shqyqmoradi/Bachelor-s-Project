@@ -1,2 +1,1 @@
 """Reproducible OnlineShopDB benchmark package."""
-

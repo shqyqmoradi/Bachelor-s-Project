@@ -15,6 +15,6 @@
     "category_count": 50,
     "address_count": 20000
   },
-  "cache_policy": "warm; one untimed warm-up then timed repetitions",
+  "cache_policy": "warm; one untimed warm-up for read and aggregation operations; mutations have no separate warm-up",
   "cold_cache": "not automated because portable, equivalent cache eviction is unavailable"
 }

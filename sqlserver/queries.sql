@@ -43,11 +43,10 @@ JOIN dbo.Products p ON p.ProductId=oi.ProductId JOIN dbo.Categories cat ON cat.C
 JOIN dbo.Payments pay ON pay.OrderId=o.OrderId JOIN dbo.Shipment s ON s.OrderId=o.OrderId
 WHERE o.Status<>'cancelled' AND pay.Status IN ('paid','authorized')
 GROUP BY c.CustomerId,c.Email,cat.Name ORDER BY ItemRevenue DESC,c.CustomerId;
--- Q14 is the Mongo aggregation equivalent of Q13; see mongodb/queries.js.
--- Q15/Q16/Q17 mutation tests must run in one transaction and roll back.
+-- Q13 is the heavy multi-join / equivalent MongoDB aggregation.
+-- Q14/Q15/Q16 mutation tests must run in one transaction and roll back.
 BEGIN TRAN;
 INSERT dbo.Products(ProductId,CategoryId,Sku,Name,Price,StockQuantity,IsActive,CreatedAt) VALUES(9000000001,1,'BENCH-1','Benchmark Product',10,10,1,SYSUTCDATETIME());
 UPDATE dbo.Products SET StockQuantity=StockQuantity+1 WHERE ProductId=9000000001;
 DELETE dbo.Products WHERE ProductId=9000000001;
 ROLLBACK;
-

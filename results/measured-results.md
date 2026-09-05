@@ -1,6 +1,6 @@
 # نتایج اندازه‌گیری‌شده
 
-> این فایل فقط از CSVهای دارای `is_real=true` تولید شده است.
+> این فایل از CSVهای خروجی Benchmark تولید شده است.
 
 ## جدول نهایی معیارهای عددی
 
@@ -16,7 +16,7 @@
 | Backup Time (s)         |       0.953 |        1.644 |     3.683 |
 | Restore Time (s)        |       1.251 |        2.395 |     3.405 |
 
-Developer Effort با rubric و diary امتیاز می‌گیرد و Security یک feature matrix است؛ تبدیل این دو به عدد بدون ارزیابی ثبت‌شده انجام نمی‌شود.
+سختی توسعه و امنیت به‌صورت کیفی بررسی می‌شوند؛ تبدیل آن‌ها به عدد بدون ثبت زمان توسعه و تعریف وزن معیارها قابل دفاع نیست.
 
 ## میانگین هر Query در فاز indexed
 
@@ -35,9 +35,9 @@ Developer Effort با rubric و diary امتیاز می‌گیرد و Security �
 | q11_orders_by_status     |    30.681 |       10.655 |      15.390 |
 | q12_top_customers        |   121.396 |       37.237 |      43.322 |
 | q13_heavy_multi_join     | 19266.948 |      541.381 |     350.272 |
-| q15_insert               |     0.491 |        0.773 |       8.421 |
-| q16_update               |     0.518 |        0.523 |       1.814 |
-| q17_delete               |     0.443 |        0.329 |       1.522 |
+| q14_insert               |     0.491 |        0.773 |       8.421 |
+| q15_update               |     0.518 |        0.523 |       1.814 |
+| q16_delete               |     0.443 |        0.329 |       1.522 |
 
 ## برندهٔ مشاهده‌شده برای هر Query در فاز indexed
 
@@ -56,8 +56,8 @@ Developer Effort با rubric و diary امتیاز می‌گیرد و Security �
 | q11_orders_by_status | postgresql | 10.655 |
 | q12_top_customers | postgresql | 37.237 |
 | q13_heavy_multi_join | sqlserver | 350.272 |
-| q15_insert | mongodb | 0.491 |
-| q16_update | mongodb | 0.518 |
-| q17_delete | postgresql | 0.329 |
+| q14_insert | mongodb | 0.491 |
+| q15_update | mongodb | 0.518 |
+| q16_delete | postgresql | 0.329 |
 
 این جدول علیت را ثابت نمی‌کند. برای توضیح تفاوت‌ها باید execution plan، تعداد اسناد/ردیف‌های بررسی‌شده، cache، serialization و overhead اتصال همراه نتایج بررسی شوند. Q05 و Q13 به‌علت تفاوت embedding/JOIN کاملاً هم‌ساخت نیستند.

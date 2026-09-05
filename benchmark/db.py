@@ -11,7 +11,9 @@ from pymongo import MongoClient
 from .config import Settings
 
 
-def sqlserver_connect(s: Settings, database: str | None = None, autocommit: bool = False) -> pyodbc.Connection:
+def sqlserver_connect(
+    s: Settings, database: str | None = None, autocommit: bool = False
+) -> pyodbc.Connection:
     return pyodbc.connect(
         f"DRIVER={{ODBC Driver 18 for SQL Server}};SERVER={s.mssql_host},{s.mssql_port};"
         f"DATABASE={database or s.mssql_database};UID={s.mssql_user};PWD={s.mssql_password};"
@@ -21,7 +23,14 @@ def sqlserver_connect(s: Settings, database: str | None = None, autocommit: bool
 
 
 def postgres_connect(s: Settings, database: str | None = None) -> psycopg.Connection:
-    return psycopg.connect(host=s.postgres_host, port=s.postgres_port, user=s.postgres_user, password=s.postgres_password, dbname=database or s.postgres_database, autocommit=False)
+    return psycopg.connect(
+        host=s.postgres_host,
+        port=s.postgres_port,
+        user=s.postgres_user,
+        password=s.postgres_password,
+        dbname=database or s.postgres_database,
+        autocommit=False,
+    )
 
 
 def mongo_connect(s: Settings) -> MongoClient:
@@ -41,7 +50,9 @@ def execute_postgres_file(connection: psycopg.Connection, path: Path) -> None:
     connection.commit()
 
 
-def sqlserver_many(connection: pyodbc.Connection, sql: str, rows: Sequence[tuple]) -> None:
+def sqlserver_many(
+    connection: pyodbc.Connection, sql: str, rows: Sequence[tuple]
+) -> None:
     if not rows:
         return
     cursor = connection.cursor()
@@ -49,7 +60,9 @@ def sqlserver_many(connection: pyodbc.Connection, sql: str, rows: Sequence[tuple
     cursor.executemany(sql, rows)
 
 
-def postgres_many(connection: psycopg.Connection, sql: str, rows: Sequence[tuple]) -> None:
+def postgres_many(
+    connection: psycopg.Connection, sql: str, rows: Sequence[tuple]
+) -> None:
     if rows:
         with connection.cursor() as cursor:
             cursor.executemany(sql, rows)

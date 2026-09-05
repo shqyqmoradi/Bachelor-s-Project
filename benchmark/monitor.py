@@ -43,8 +43,16 @@ class SystemMonitor:
         end = psutil.cpu_times()
         if self._start_times is not None:
             total = sum(end) - sum(self._start_times)
-            idle = (end.idle - self._start_times.idle) + (getattr(end, "iowait", 0.0) - getattr(self._start_times, "iowait", 0.0))
-            self.cpu.append(max(0.0, min(100.0, 100.0 * (1.0 - idle / total))) if total > 0 else 0.0)
+            idle = (end.idle - self._start_times.idle) + (
+                getattr(end, "iowait", 0.0) - getattr(self._start_times, "iowait", 0.0)
+            )
+            self.cpu.append(
+                max(0.0, min(100.0, 100.0 * (1.0 - idle / total))) if total > 0 else 0.0
+            )
 
     def stats(self) -> ResourceStats:
-        return ResourceStats(sum(self.cpu) / len(self.cpu) if self.cpu else 0.0, max(self.ram, default=0.0), sum(self.ram) / len(self.ram) if self.ram else 0.0)
+        return ResourceStats(
+            sum(self.cpu) / len(self.cpu) if self.cpu else 0.0,
+            max(self.ram, default=0.0),
+            sum(self.ram) / len(self.ram) if self.ram else 0.0,
+        )

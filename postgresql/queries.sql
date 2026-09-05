@@ -40,11 +40,10 @@ FROM customers c JOIN orders o USING(customer_id) JOIN order_items oi USING(orde
 JOIN products p USING(product_id) JOIN categories cat USING(category_id) JOIN payments pay USING(order_id)
 JOIN shipment s USING(order_id) WHERE o.status<>'cancelled' AND pay.status IN ('paid','authorized')
 GROUP BY c.customer_id,c.email,cat.name ORDER BY item_revenue DESC,c.customer_id LIMIT 100;
--- Q14: see MongoDB aggregation.
--- Q15-Q17, rollback keeps the measured database unchanged.
+-- Q13 is the heavy multi-join / equivalent MongoDB aggregation.
+-- Q14-Q16: rollback keeps the measured database unchanged.
 BEGIN;
 INSERT INTO products VALUES(9000000001,1,'BENCH-1','Benchmark Product',NULL,10,10,TRUE,NOW());
 UPDATE products SET stock_quantity=stock_quantity+1 WHERE product_id=9000000001;
 DELETE FROM products WHERE product_id=9000000001;
 ROLLBACK;
-

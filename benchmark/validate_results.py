@@ -7,7 +7,12 @@ from .config import ROOT
 
 
 def main() -> None:
-    required = ("raw_results.csv","summary_results.csv","insert_results.csv","storage_results.csv")
+    required = (
+        "raw_results.csv",
+        "summary_results.csv",
+        "insert_results.csv",
+        "storage_results.csv",
+    )
     loaded: dict[str, list[dict]] = {}
     for name in required:
         path = ROOT / "results" / name
@@ -24,7 +29,9 @@ def main() -> None:
     databases = {row["database"] for row in raw}
     phases = {row["index_phase"] for row in raw}
     operations = {row["query_id"] for row in raw}
-    metadata = json.loads((ROOT / "results" / "environment.json").read_text(encoding="utf-8"))
+    metadata = json.loads(
+        (ROOT / "results" / "environment.json").read_text(encoding="utf-8")
+    )
     repetitions = int(metadata["repetitions"])
     expected_rows = len(databases) * len(phases) * len(operations) * repetitions
     if len(operations) != 16 or len(raw) != expected_rows:
@@ -37,11 +44,19 @@ def main() -> None:
     if restore_path.exists():
         restore_rows = list(csv.DictReader(restore_path.open(encoding="utf-8")))
         expected_entities = {
-            "customers", "addresses", "categories", "products",
-            "orders", "order_items", "payments", "shipment",
+            "customers",
+            "addresses",
+            "categories",
+            "products",
+            "orders",
+            "order_items",
+            "payments",
+            "shipment",
         }
         for database in databases:
-            actual = {row["entity"] for row in restore_rows if row["database"] == database}
+            actual = {
+                row["entity"] for row in restore_rows if row["database"] == database
+            }
             if actual != expected_entities:
                 raise SystemExit(
                     f"Restore validation mismatch for {database}: "

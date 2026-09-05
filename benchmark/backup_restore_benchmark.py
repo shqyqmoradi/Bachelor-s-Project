@@ -56,8 +56,14 @@ def validate_sqlserver_restore(s: Settings) -> list[dict]:
     with closing(sqlserver_connect(s, "OnlineShopDB_restore")) as connection:
         cursor = connection.cursor()
         for entity, sqlserver_table, _ in RELATIONAL_ENTITIES:
-            count = int(cursor.execute(f"SELECT COUNT_BIG(*) FROM dbo.{sqlserver_table}").fetchone()[0])
-            rows.append(validation_row("sqlserver", entity, count, "direct_count_query"))
+            count = int(
+                cursor.execute(
+                    f"SELECT COUNT_BIG(*) FROM dbo.{sqlserver_table}"
+                ).fetchone()[0]
+            )
+            rows.append(
+                validation_row("sqlserver", entity, count, "direct_count_query")
+            )
     return rows
 
 
@@ -66,8 +72,14 @@ def validate_postgresql_restore(s: Settings) -> list[dict]:
     with postgres_connect(s, "OnlineShopDB_restore") as connection:
         with connection.cursor() as cursor:
             for entity, _, postgresql_table in RELATIONAL_ENTITIES:
-                count = int(cursor.execute(f"SELECT COUNT(*) FROM {postgresql_table}").fetchone()[0])
-                rows.append(validation_row("postgresql", entity, count, "direct_count_query"))
+                count = int(
+                    cursor.execute(
+                        f"SELECT COUNT(*) FROM {postgresql_table}"
+                    ).fetchone()[0]
+                )
+                rows.append(
+                    validation_row("postgresql", entity, count, "direct_count_query")
+                )
     return rows
 
 
@@ -80,16 +92,47 @@ def validate_mongodb_restore(s: Settings) -> list[dict]:
     with mongo_connect(s) as client:
         database = client["OnlineShopDB_restore"]
         counts = (
-            ("customers", database.customers.count_documents({}), "direct_document_count"),
-            ("addresses", aggregate_count(database.customers, [{"$unwind": "$addresses"}]), "embedded_address_count"),
-            ("categories", database.categories.count_documents({}), "direct_document_count"),
-            ("products", database.products.count_documents({}), "direct_document_count"),
+            (
+                "customers",
+                database.customers.count_documents({}),
+                "direct_document_count",
+            ),
+            (
+                "addresses",
+                aggregate_count(database.customers, [{"$unwind": "$addresses"}]),
+                "embedded_address_count",
+            ),
+            (
+                "categories",
+                database.categories.count_documents({}),
+                "direct_document_count",
+            ),
+            (
+                "products",
+                database.products.count_documents({}),
+                "direct_document_count",
+            ),
             ("orders", database.orders.count_documents({}), "direct_document_count"),
-            ("order_items", aggregate_count(database.orders, [{"$unwind": "$items"}]), "embedded_item_count"),
-            ("payments", database.orders.count_documents({"payment": {"$type": "object"}}), "embedded_payment_count"),
-            ("shipment", database.orders.count_documents({"shipment": {"$type": "object"}}), "embedded_shipment_count"),
+            (
+                "order_items",
+                aggregate_count(database.orders, [{"$unwind": "$items"}]),
+                "embedded_item_count",
+            ),
+            (
+                "payments",
+                database.orders.count_documents({"payment": {"$type": "object"}}),
+                "embedded_payment_count",
+            ),
+            (
+                "shipment",
+                database.orders.count_documents({"shipment": {"$type": "object"}}),
+                "embedded_shipment_count",
+            ),
         )
-        return [validation_row("mongodb", entity, int(count), method) for entity, count, method in counts]
+        return [
+            validation_row("mongodb", entity, int(count), method)
+            for entity, count, method in counts
+        ]
 
 
 def write_csv(path: Path, rows: list[dict]) -> None:
@@ -112,9 +155,20 @@ def main() -> None:
             "sqlserver",
             "backup",
             [
-                "docker", "compose", "exec", "-T", "sqlserver",
-                "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", s.mssql_user,
-                "-P", s.mssql_password, "-C", "-Q",
+                "docker",
+                "compose",
+                "exec",
+                "-T",
+                "sqlserver",
+                "/opt/mssql-tools18/bin/sqlcmd",
+                "-S",
+                "localhost",
+                "-U",
+                s.mssql_user,
+                "-P",
+                s.mssql_password,
+                "-C",
+                "-Q",
                 "BACKUP DATABASE OnlineShopDB TO DISK='/var/opt/mssql/backup/OnlineShopDB_sqlserver.bak' WITH INIT, COMPRESSION, CHECKSUM",
             ],
             sql_bak,
@@ -125,9 +179,20 @@ def main() -> None:
             "sqlserver",
             "restore",
             [
-                "docker", "compose", "exec", "-T", "sqlserver",
-                "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", s.mssql_user,
-                "-P", s.mssql_password, "-C", "-Q",
+                "docker",
+                "compose",
+                "exec",
+                "-T",
+                "sqlserver",
+                "/opt/mssql-tools18/bin/sqlcmd",
+                "-S",
+                "localhost",
+                "-U",
+                s.mssql_user,
+                "-P",
+                s.mssql_password,
+                "-C",
+                "-Q",
                 "IF DB_ID('OnlineShopDB_restore') IS NOT NULL BEGIN ALTER DATABASE OnlineShopDB_restore SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE OnlineShopDB_restore; END; RESTORE DATABASE OnlineShopDB_restore FROM DISK='/var/opt/mssql/backup/OnlineShopDB_sqlserver.bak' WITH MOVE 'OnlineShopDB' TO '/var/opt/mssql/data/OnlineShopDB_restore.mdf', MOVE 'OnlineShopDB_log' TO '/var/opt/mssql/data/OnlineShopDB_restore_log.ldf', RECOVERY",
             ],
         )
@@ -140,8 +205,17 @@ def main() -> None:
             "postgresql",
             "backup",
             [
-                "docker", "compose", "exec", "-T", "postgres", "pg_dump",
-                "-U", s.postgres_user, "-Fc", "-f", "/backups/OnlineShopDB_postgresql.dump",
+                "docker",
+                "compose",
+                "exec",
+                "-T",
+                "postgres",
+                "pg_dump",
+                "-U",
+                s.postgres_user,
+                "-Fc",
+                "-f",
+                "/backups/OnlineShopDB_postgresql.dump",
                 s.postgres_database,
             ],
             pg_bak,
@@ -152,7 +226,13 @@ def main() -> None:
             "postgresql",
             "restore",
             [
-                "docker", "compose", "exec", "-T", "postgres", "bash", "-lc",
+                "docker",
+                "compose",
+                "exec",
+                "-T",
+                "postgres",
+                "bash",
+                "-lc",
                 f"dropdb -U {s.postgres_user} --if-exists OnlineShopDB_restore && createdb -U {s.postgres_user} OnlineShopDB_restore && pg_restore -U {s.postgres_user} -d OnlineShopDB_restore /backups/OnlineShopDB_postgresql.dump",
             ],
         )
@@ -165,10 +245,22 @@ def main() -> None:
             "mongodb",
             "backup",
             [
-                "docker", "compose", "exec", "-T", "mongodb", "mongodump",
-                "--username", s.mongo_user, "--password", s.mongo_password,
-                "--authenticationDatabase", "admin", "--db", s.mongo_database,
-                "--archive=/backups/OnlineShopDB_mongodb.archive.gz", "--gzip",
+                "docker",
+                "compose",
+                "exec",
+                "-T",
+                "mongodb",
+                "mongodump",
+                "--username",
+                s.mongo_user,
+                "--password",
+                s.mongo_password,
+                "--authenticationDatabase",
+                "admin",
+                "--db",
+                s.mongo_database,
+                "--archive=/backups/OnlineShopDB_mongodb.archive.gz",
+                "--gzip",
             ],
             mongo_bak,
         )
@@ -178,11 +270,23 @@ def main() -> None:
             "mongodb",
             "restore",
             [
-                "docker", "compose", "exec", "-T", "mongodb", "mongorestore",
-                "--username", s.mongo_user, "--password", s.mongo_password,
-                "--authenticationDatabase", "admin",
-                "--archive=/backups/OnlineShopDB_mongodb.archive.gz", "--gzip",
-                "--nsFrom=OnlineShopDB.*", "--nsTo=OnlineShopDB_restore.*", "--drop",
+                "docker",
+                "compose",
+                "exec",
+                "-T",
+                "mongodb",
+                "mongorestore",
+                "--username",
+                s.mongo_user,
+                "--password",
+                s.mongo_password,
+                "--authenticationDatabase",
+                "admin",
+                "--archive=/backups/OnlineShopDB_mongodb.archive.gz",
+                "--gzip",
+                "--nsFrom=OnlineShopDB.*",
+                "--nsTo=OnlineShopDB_restore.*",
+                "--drop",
             ],
         )
     )
