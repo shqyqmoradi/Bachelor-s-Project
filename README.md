@@ -1,14 +1,16 @@
-# Practical Comparison of SQL Server, PostgreSQL and MongoDB
+# B.Sc. Computer Engineering (IT) final project
 
-این پروژه مربوط به پروژه دانشگاهی مقطع کارشناسی مهندسی کامپیوتر ـ نرم‌افزار در دانشگاه شیراز است.
+## Practical Comparison of SQL Server, PostgreSQL and MongoDB
 
-در این پروژه سه سیستم مدیریت پایگاه داده `SQL Server`، `PostgreSQL` و `MongoDB` در یک سناریوی یکسان فروشگاه آنلاین با هم مقایسه شده‌اند.
+This is a B.Sc. Computer Engineering (IT) final project at Shiraz University.
 
-هدف اصلی پروژه بررسی تفاوت این سه سیستم از نظر ساختار داده، Query Performance، تأثیر Index، زمان Insert/Update/Delete، مصرف منابع، حجم ذخیره‌سازی و Backup/Restore است.
+This project compares three database management systems, `SQL Server`, `PostgreSQL`, and `MongoDB`, using the same online shop scenario.
 
-## ساختار فروشگاه آنلاین
+The primary goal is to evaluate the differences between these systems in terms of data modeling, query performance, index impact, insert/update/delete execution time, resource consumption, storage size, and backup/restore performance.
 
-مدل پروژه شامل ۸ موجودیت اصلی است:
+## Online Shop Structure
+
+The project model includes 8 core entities:
 
 - Customers
 - Categories
@@ -19,37 +21,37 @@
 - Addresses
 - Shipment
 
-در `SQL Server` و `PostgreSQL` از مدل رابطه‌ای استفاده شده است.
+`SQL Server` and `PostgreSQL` use the relational model.
 
-در `MongoDB` داده‌ها با مدل سندی و استفاده از Embedded Documents و References طراحی شده‌اند.
+`MongoDB` uses a document model with embedded documents and references.
 
-## طراحی Benchmark
+## Benchmark Design
 
-نتایج اصلی پروژه با ۱۰۰٬۰۰۰ سفارش ثبت شده‌اند.
+The main project results were collected using 100,000 orders.
 
-برای تولید داده‌های یکسان در هر سه سیستم از Seed ثابت زیر استفاده شده است:
+The following fixed seed is used to generate identical data for all three systems:
 
 ```text
 20260830
 ```
 
-هر سفارش بین ۱ تا ۵ آیتم دارد.
+Each order contains between 1 and 5 items.
 
-در مجموع ۱۶ عملیات برای Benchmark در نظر گرفته شده است:
+A total of 16 benchmark operations are included:
 
-- ۱۳ عملیات خواندن و تجمیع
+- 13 read and aggregation operations
 - Insert
 - Update
 - Delete
 
-هر عملیات خواندنی ۱۰ بار اجرا می‌شود و قبل از آن یک Warm-up انجام می‌شود.
+Each read operation is executed 10 times after a warm-up run.
 
-Benchmark در دو مرحله اجرا می‌شود:
+The benchmark is executed in two stages:
 
-1. فقط Indexهای اصلی و اجباری
-2. همراه با Indexهای مخصوص Workload
+1. With only the required primary indexes
+2. With additional workload-specific indexes
 
-## نسخه‌های استفاده‌شده
+## Versions Used
 
 | Database | Version |
 |---|---|
@@ -57,71 +59,71 @@ Benchmark در دو مرحله اجرا می‌شود:
 | PostgreSQL | PostgreSQL 16.4 |
 | MongoDB | MongoDB 7.0.14 |
 
-اجرای پایگاه داده‌ها با Docker انجام می‌شود.
+The databases run using Docker.
 
-## پیش‌نیازها
+## Prerequisites
 
 - Docker Desktop
-- Python 3.11 یا 3.12
+- Python 3.11 or 3.12
 - Microsoft ODBC Driver 18 for SQL Server
 - GNU Make
 
-نصب Driver روی macOS:
+Install the driver on macOS:
 
 ```bash
 brew install unixodbc
 brew install --cask microsoft-odbc-driver-for-sql-server
 ```
 
-## اجرای پروژه
+## Running the Project
 
-ابتدا فایل محیطی را بسازید:
+First, create the environment file:
 
 ```bash
 make env
 ```
 
-سپس سرویس‌ها را اجرا کنید:
+Then start the services:
 
 ```bash
 make up
 ```
 
-وضعیت Containerها:
+Check the container status:
 
 ```bash
 docker compose ps
 ```
 
-برای اجرای Benchmark اصلی:
+Run the main benchmark:
 
 ```bash
 ORDERS=100000 REPETITIONS=10 make benchmark
 ```
 
-برای اجرای مستقیم با Python:
+Run it directly with Python:
 
 ```bash
 .venv/bin/python -m benchmark.run_all --orders 100000
 ```
 
-## Backup و Restore
+## Backup and Restore
 
-برای اجرای تست Backup و Restore:
+Run the backup and restore test:
 
 ```bash
 .venv/bin/python -m benchmark.backup_restore_benchmark
 ```
 
-نتایج در پوشه زیر ذخیره می‌شوند:
+Results are stored in:
 
 ```text
 results/
 ```
 
-## خروجی‌های اصلی
+## Main Outputs
 
-مهم‌ترین فایل‌های نتیجه:
+The main result files are:
 
 ```text
 results/raw_results.csv
@@ -134,19 +136,19 @@ results/restore_validation.csv
 results/final_comparison.csv
 ```
 
-برای بررسی صحت نتایج:
+Validate the results:
 
 ```bash
 make validate
 ```
 
-برای تحلیل نهایی:
+Run the final analysis:
 
 ```bash
 make analyze
 ```
 
-## ساختار پروژه
+## Project Structure
 
 ```text
 benchmark/       benchmark scripts and data generator
@@ -162,24 +164,24 @@ README.md
 requirements.txt
 ```
 
-## نکته درباره محیط اجرا
+## Runtime Environment Note
 
-روی Macهای دارای Apple Silicon، SQL Server با Emulation اجرا می‌شود، چون Image رسمی آن بر پایه معماری `amd64` است.
+On Macs with Apple Silicon, SQL Server runs through emulation because its official image is based on the `amd64` architecture.
 
-به همین دلیل نتایج Performance روی Apple Silicon ممکن است کاملاً منصفانه نباشند و برای Benchmark دقیق‌تر بهتر است از یک سیستم `x86-64` استفاده شود.
+Therefore, performance results on Apple Silicon may not be fully representative. For more accurate benchmarking, an `x86-64` system is recommended.
 
-## پاک‌سازی
+## Cleanup
 
-برای متوقف کردن سرویس‌ها:
+Stop the services:
 
 ```bash
 make down
 ```
 
-برای حذف Volumeهای آزمایشی:
+Remove the test volumes:
 
 ```bash
 docker compose down -v
 ```
 
-این پروژه با هدف مقایسه عملی سه پایگاه داده در یک محیط یکسان و بررسی تفاوت مدل رابطه‌ای و سندی انجام شده است.
+This project provides a practical comparison of three database systems in a consistent environment and examines the differences between relational and document models.
