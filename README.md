@@ -1,4 +1,4 @@
-# B.Sc. Computer Engineering (IT) final project
+# B.Sc. Computer Engineering (IT) final project-Shiraz University 
 
 ## Practical Comparison of SQL Server, PostgreSQL and MongoDB
 
