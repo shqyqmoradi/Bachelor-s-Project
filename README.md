@@ -2,6 +2,9 @@
 
 ## Practical Comparison of SQL Server, PostgreSQL and MongoDB
 
+**Author:** Shaghayegh Alimoradi  
+**Supervisor:** Dr. Taghizadeh
+
 This is a B.Sc. Computer Engineering (IT) final project at Shiraz University.
 
 This project compares three database management systems, `SQL Server`, `PostgreSQL`, and `MongoDB`, using the same online shop scenario.
